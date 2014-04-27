@@ -10,7 +10,7 @@ import javax.persistence.Table;
  * Created by Liron on 27/04/2014.
  */
 @Entity
-@Table(name="hosts")
+@Table(name = "hosts")
 public class Host {
 
     @Id
@@ -19,8 +19,11 @@ public class Host {
 
     private String firstName;
 
-
     private String lastName;
+
+    private String phoneNumber;
+
+    private String picUrl;
 
     public String getFirstName() {
         return firstName;
@@ -35,12 +38,27 @@ public class Host {
     }
 
 
-
     public String getLastName() {
         return lastName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
     }
 }
