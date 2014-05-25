@@ -10,6 +10,7 @@
 	Test Guest
 </h1>
 <input id="createGuest" type="submit" value="create guest"/>
+<input id="sendNotification" type="submit" value="send notification"/>
 
  <br/>
       <script type="text/javascript">
@@ -29,13 +30,31 @@
                                      email:"dana@gmail.com",
                                      phoneNumber:"0545791818"
                                  }),
+                                 dataType: "html",
                                  success:function (responseText) {
-                                     $("body").html("created successfully");
+                                     $("body").html(responseText);
                                  }
                              });
 
 
              });
+
+
+                 $("#sendNotification").click(function() {
+
+                              $.ajax({
+
+                                              type:"POST",
+                                              url:"/notifications?hostId=7&guestId=9",
+                                              contentType:"application/json",
+                                              dataType: "html",
+                                              success:function (responseText) {
+                                                  $("body").html(responseText);
+                                              }
+                                          });
+
+
+                          });
 
 
          });
