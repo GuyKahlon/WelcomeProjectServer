@@ -1,6 +1,8 @@
 package com.citi.innovaciti.welcome.web;
 
+import com.citi.innovaciti.welcome.domain.Guest;
 import com.citi.innovaciti.welcome.domain.Host;
+import com.citi.innovaciti.welcome.repositories.GuestRepository;
 import com.citi.innovaciti.welcome.repositories.HostRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,22 +25,25 @@ public class HomeController {
 
     @Autowired
     private HostRepository hostRepository;
-	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! the client locale is "+ locale.toString());
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
+
+    @Autowired
+    private GuestRepository guestRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+
+    /**
+     * Simply selects the home view to render by returning its name.
+     */
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String home(Locale locale, Model model) {
+        logger.info("Welcome home! the client locale is " + locale.toString());
+
+        Date date = new Date();
+        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+
+        String formattedDate = dateFormat.format(date);
+
+        model.addAttribute("serverTime", formattedDate);
 
         Host host = new Host();
         host.setFirstName("Liron");
@@ -52,12 +57,23 @@ public class HomeController {
 
 
         List<Host> hosts = hostRepository.findByFirstName("Liron");
-        model.addAttribute("host",hosts.get(0).getFirstName()) ;
+        model.addAttribute("host", hosts.get(0).getFirstName());
 
-       long hostsCount = hostRepository.count();
-        model.addAttribute("NumOfHosts",hostsCount) ;
+        long hostsCount = hostRepository.count();
+        model.addAttribute("NumOfHosts", hostsCount);
 
-		return "home";
-	}
-	
+
+        Guest guest = new Guest();
+        guest.setFirstName("Avi");
+        guest.setLastName("Cohen");
+        guest.setEmail("avi.cohen@gmail.com");
+        guest.setPhoneNumber("0528967123");
+        guestRepository.save(guest);
+        List<Guest> guests = guestRepository.findByFirstName("Avi");
+        model.addAttribute("guest", guests.get(0).getFirstName());
+
+
+        return "home";
+    }
+
 }
