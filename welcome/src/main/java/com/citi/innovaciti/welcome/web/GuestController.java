@@ -38,6 +38,19 @@ public class GuestController {
 
     }
 
+
+    @RequestMapping(value = "/search",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Map<String, Object> searchByPic() {
+
+        Map<String, Object> model = new HashMap<String, Object>();
+
+        model.put("guest", "{}");
+
+        return model;
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public
     @ResponseBody

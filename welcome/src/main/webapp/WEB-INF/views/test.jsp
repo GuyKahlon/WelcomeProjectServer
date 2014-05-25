@@ -9,8 +9,9 @@
 <h1>
 	Test Guest
 </h1>
-<input id="createGuest" type="submit" value="create guest"/>
-<input id="sendNotification" type="submit" value="send notification"/>
+<input id="searchGuest" type="submit" value="Search Guest"/>
+<input id="createGuest" type="submit" value="Create Guest"/>
+<input id="sendNotification" type="submit" value="Send Notification"/>
 
  <br/>
       <script type="text/javascript">
@@ -55,6 +56,23 @@
 
 
                           });
+
+
+                 $("#searchGuest").click(function() {
+
+                               $.ajax({
+
+                                              type:"POST",
+                                              url:"/guests/search",
+                                              contentType:"application/json",
+                                              dataType: "html",
+                                              success:function (responseText) {
+                                                $("body").html(responseText);
+                                              }
+                                });
+
+
+                  });
 
 
          });
