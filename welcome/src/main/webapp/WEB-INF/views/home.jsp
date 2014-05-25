@@ -10,8 +10,7 @@
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
-<P>  Found a host named ${host}. </P>
 <P>  Found ${NumOfHosts} hosts. </P>
-<P>  Found a guest named ${guest}. </P>
+<P>  Found ${NumOfGuests} guests. </P>
 </body>
 </html>

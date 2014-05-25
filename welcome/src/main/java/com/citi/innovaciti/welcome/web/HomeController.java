@@ -1,9 +1,7 @@
 package com.citi.innovaciti.welcome.web;
 
-import com.citi.innovaciti.welcome.domain.Guest;
-import com.citi.innovaciti.welcome.domain.Host;
-import com.citi.innovaciti.welcome.repositories.GuestRepository;
-import com.citi.innovaciti.welcome.repositories.HostRepository;
+import com.citi.innovaciti.welcome.daos.GuestDao;
+import com.citi.innovaciti.welcome.daos.HostDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -24,10 +21,12 @@ import java.util.Locale;
 public class HomeController {
 
     @Autowired
-    private HostRepository hostRepository;
+    private HostDao hostDao;
 
     @Autowired
-    private GuestRepository guestRepository;
+    private GuestDao guestDao;
+
+
 
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
@@ -45,32 +44,13 @@ public class HomeController {
 
         model.addAttribute("serverTime", formattedDate);
 
-        Host host = new Host();
-        host.setFirstName("Liron");
-        host.setLastName("Netzer");
-        hostRepository.save(host);
-
-        Host host2 = new Host();
-        host2.setFirstName("Kfir");
-        host2.setLastName("Tishbi");
-        hostRepository.save(host2);
-
-
-        List<Host> hosts = hostRepository.findByFirstName("Liron");
-        model.addAttribute("host", hosts.get(0).getFirstName());
-
-        long hostsCount = hostRepository.count();
+        long hostsCount = hostDao.getHostsCount();
         model.addAttribute("NumOfHosts", hostsCount);
 
+        long guestsCount = guestDao.getGuestsCount();
+        model.addAttribute("NumOfGuests", guestsCount);
 
-        Guest guest = new Guest();
-        guest.setFirstName("Avi");
-        guest.setLastName("Cohen");
-        guest.setEmail("avi.cohen@gmail.com");
-        guest.setPhoneNumber("0528967123");
-        guestRepository.save(guest);
-        List<Guest> guests = guestRepository.findByFirstName("Avi");
-        model.addAttribute("guest", guests.get(0).getFirstName());
+
 
 
         return "home";

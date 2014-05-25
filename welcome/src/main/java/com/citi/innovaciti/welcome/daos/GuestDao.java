@@ -17,6 +17,11 @@ public class GuestDao {
     @Autowired
     private GuestRepository guestRepository;
 
+
+    public Guest save(Guest guest){
+       return guestRepository.save(guest);
+    }
+
     public List<Guest> getGuests(int page, int size){
         return guestRepository.findAll(new PageRequest(page,size)).getContent();
     }

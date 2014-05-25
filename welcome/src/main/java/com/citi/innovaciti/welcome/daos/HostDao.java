@@ -17,6 +17,10 @@ public class HostDao {
     @Autowired
     private HostRepository hostRepository;
 
+    public Host save(Host host){
+        return hostRepository.save(host);
+    }
+
     public List<Host> getHosts(int page, int size){
         return hostRepository.findAll(new PageRequest(page,size)).getContent();
     }
