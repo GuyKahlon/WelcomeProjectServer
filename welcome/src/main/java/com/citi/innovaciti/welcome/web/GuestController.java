@@ -2,11 +2,15 @@ package com.citi.innovaciti.welcome.web;
 
 import com.citi.innovaciti.welcome.daos.GuestDao;
 import com.citi.innovaciti.welcome.domain.Guest;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +26,10 @@ public class GuestController {
     private GuestDao guestDao;
 
     @RequestMapping(method = RequestMethod.GET)
-    public @ResponseBody
+    public
+    @ResponseBody
     Map<String, Object> showGuests(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                                  @RequestParam(value = "size", required = false, defaultValue = "100") int size) {
+                                   @RequestParam(value = "size", required = false, defaultValue = "100") int size) {
 
         Map<String, Object> model = new HashMap<String, Object>();
         List<Guest> guests = guestDao.getGuests(page, size);
@@ -39,14 +44,33 @@ public class GuestController {
     }
 
 
-    @RequestMapping(value = "/search",method = RequestMethod.POST)
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
     public
     @ResponseBody
-    Map<String, Object> searchByPic() {
+    Map<String, Object> searchByPic(@RequestBody String picture) {
 
         Map<String, Object> model = new HashMap<String, Object>();
 
-        model.put("guest", "{}");
+        byte[] imageByteArray = Base64.decodeBase64(picture);
+
+        FileOutputStream imageOutFile = null;
+        String fileName ="pic1.jpg";
+        try {
+
+            imageOutFile = new FileOutputStream("C:\\Users\\Liron\\Desktop\\tmp\\"+fileName);
+            imageOutFile.write(imageByteArray);
+            imageOutFile.close();
+
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
+
+        } finally {
+
+        }
+
+
+        model.put("guest","{}");
 
         return model;
     }
@@ -64,7 +88,6 @@ public class GuestController {
 
         return model;
     }
-
 
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)

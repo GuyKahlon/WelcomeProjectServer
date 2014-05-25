@@ -32,6 +32,8 @@ public class HostController {
         List<Host> hosts = hostDao.getHosts(page, size);
         model.put("hosts", hosts);
 
+        model.put("currentPageIndex", page);
+
         long hostsCount = hostDao.getHostsCount();
         float numOfPages = (float) hostsCount / size;
         model.put("maxPages", (int) ((numOfPages > (int) numOfPages || numOfPages == 0.0) ? numOfPages + 1 : numOfPages));
