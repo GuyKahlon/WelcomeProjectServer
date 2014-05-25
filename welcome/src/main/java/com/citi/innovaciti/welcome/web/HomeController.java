@@ -51,8 +51,6 @@ public class HomeController {
         model.addAttribute("NumOfGuests", guestsCount);
 
 
-
-
         return "home";
     }
 

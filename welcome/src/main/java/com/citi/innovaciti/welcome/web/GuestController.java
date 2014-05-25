@@ -4,10 +4,8 @@ import com.citi.innovaciti.welcome.daos.GuestDao;
 import com.citi.innovaciti.welcome.domain.Guest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,5 +36,27 @@ public class GuestController {
 
         return model;
 
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Map<String, Object> create(@RequestBody Guest guest) {
+
+        Map<String, Object> model = new HashMap<String, Object>();
+
+        guestDao.save(guest);
+
+        model.put("guest", guest);
+
+        return model;
+    }
+
+
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String showTestJson(Model uiModel) {
+
+        return "test";
     }
 }
