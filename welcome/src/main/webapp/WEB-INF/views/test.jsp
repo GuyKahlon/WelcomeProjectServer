@@ -69,7 +69,7 @@
 
                     var imgElem = document.getElementById('img');
                     var imgData = JSON.stringify(getBase64Image(imgElem));
-                     alert(imgData);
+                     //alert(imgData);
                                $.ajax({
 
                                               type:"POST",

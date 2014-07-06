@@ -2,6 +2,7 @@ package com.citi.innovaciti.welcome.web;
 
 import com.citi.innovaciti.welcome.daos.GuestDao;
 import com.citi.innovaciti.welcome.domain.Guest;
+import com.citi.innovaciti.welcome.domain.PictureCollection;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,9 +48,11 @@ public class GuestController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public
     @ResponseBody
-    Map<String, Object> searchByPic(@RequestBody String picture) {
+    Map<String, Object> searchByPic(@RequestBody PictureCollection pictureCollection) {
 
         Map<String, Object> model = new HashMap<String, Object>();
+
+        String picture = pictureCollection.getPictures().get(0);
 
         byte[] imageByteArray = Base64.decodeBase64(picture);
 
