@@ -25,6 +25,8 @@
 <br/>
 <input id="sendNotification" type="submit" value="Send Notification"/>
 <br/>
+<input id="searchByPhone" type="submit" value="Search By phone"/>
+<br/>
 
 
 <img id="img" src="/resources/0.jpg" />
@@ -217,6 +219,24 @@
                                                                                                     url:"/guests/search",
                                                                                                     contentType:"application/json",
                                                                                                     data:JSON.stringify( {pictures: [imgData,imgData2,imgData3]}),
+                                                                                                    dataType: "html",
+                                                                                                    success:function (responseText) {
+                                                                                                      $("body").html(responseText);
+                                                                                                    }
+                                                                                      });
+
+
+                                                                        });
+
+
+
+                      $("#searchByPhone").click(function() {
+
+                                                                                     $.ajax({
+
+                                                                                                    type:"GET",
+                                                                                                    url:"/guests/searchByPhone?phoneNumber=0545791818",
+                                                                                                    contentType:"application/json",
                                                                                                     dataType: "html",
                                                                                                     success:function (responseText) {
                                                                                                       $("body").html(responseText);

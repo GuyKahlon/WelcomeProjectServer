@@ -63,11 +63,11 @@ public class GuestController {
     @ResponseBody
     Map<String, Object> searchByPic(@RequestBody PictureCollection pictureCollection) {
 
-        int numOfPics=0;
-        if(pictureCollection!=null){
-            numOfPics=pictureCollection.getPictures().size();
+        int numOfPics = 0;
+        if (pictureCollection != null) {
+            numOfPics = pictureCollection.getPictures().size();
         }
-        log.info("Recived "+numOfPics+" pictures");
+        log.info("Recived " + numOfPics + " pictures");
 
         Map<String, Object> model = new HashMap<String, Object>();
 
@@ -110,7 +110,7 @@ public class GuestController {
         long bestGuestMatch = -1;
         float bestConfidence = Float.NEGATIVE_INFINITY;
 
-        for (Map.Entry<Long,List<Float>> entry: guestIdToConfidence.entrySet()) {
+        for (Map.Entry<Long, List<Float>> entry : guestIdToConfidence.entrySet()) {
 
             Long guestId = entry.getKey();
             List<Float> confidenceList = entry.getValue();
@@ -135,8 +135,6 @@ public class GuestController {
         }
 
 
-
-
         //guest wasn't found, save the pictures and return identifier for their folder
 
         //create a new folder under /resources
@@ -156,6 +154,33 @@ public class GuestController {
         model.put("picUrl", currTime);
 
         model.put("guest", "{}");
+
+        return model;
+    }
+
+    @RequestMapping(value = "/searchByPhone", method = RequestMethod.GET, params = {"phoneNumber"})
+    public
+    @ResponseBody
+    Map<String, Object> searchByPhoneNumber(@RequestParam String phoneNumber) {
+
+        Map<String, Object> model = new HashMap<String, Object>();
+
+        List<Guest> guests = guestDao.findByPhoneNumber(phoneNumber);
+
+        if (guests == null || guests.size()==0) {
+
+            log.info("There is no existing guest with the following phone number " + phoneNumber);
+
+            model.put("guest", "{}");
+
+            return model;
+        }
+        if (guests.size() > 1) {
+            log.error("There is more than one Guest that has the following phone number: " + phoneNumber + ". Using the first guest: " + guests.get(0).getId());
+
+        }
+
+        model.put("guest", guests.get(0));
 
         return model;
     }
@@ -262,7 +287,7 @@ public class GuestController {
             }
         }*/
 
-        log.info("Training the model");
+/*        log.info("Training the model");
         try {
 
             faceRecognizerService.trainModel(guestDao.getAllGuests());
@@ -270,7 +295,7 @@ public class GuestController {
             log.error("Failed to train the Face-Recognition model", e);
             return model;
         }
-        log.info("Finished Training the model");
+        log.info("Finished Training the model");*/
 
         return model;
     }

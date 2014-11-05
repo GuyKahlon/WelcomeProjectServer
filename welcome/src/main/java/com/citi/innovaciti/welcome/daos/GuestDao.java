@@ -37,4 +37,8 @@ public class GuestDao {
     public List<Guest> getAllGuests(){
         return guestRepository.findAll();
     }
+
+    public List<Guest> findByPhoneNumber(String phoneNumber){
+        return guestRepository.findByPhoneNumber(phoneNumber);
+    }
 }

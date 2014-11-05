@@ -106,7 +106,7 @@ public class FaceRecognition {
     //CvMat trainDataMat;
 
 
-    public static final String rootDir = "C:/Users/Liron/GitHub/WelcomeProjectServer/welcome/src/main/resources/";
+    public static final String rootDir = "C:/Users/Liron/welcomeProject2/WelcomeProjectServer/welcome/src/main/resources/";
 
     /**
      * Constructs a new FaceRecognition instance.

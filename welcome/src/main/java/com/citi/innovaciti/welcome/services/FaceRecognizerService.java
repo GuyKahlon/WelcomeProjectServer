@@ -20,7 +20,7 @@ public class FaceRecognizerService {
 
 
 
-    private static final String trainingDBPath = "C:/Users/Liron/GitHub/WelcomeProjectServer/faceRecognition/facedata.xml";
+    private static final String trainingDBPath = "C:/Users/Liron/welcomeProject2/WelcomeProjectServer/faceRecognition/facedata.xml";
 
     private FaceRecognition faceRecognition;
 
