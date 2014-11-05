@@ -84,6 +84,11 @@
             <version>1.5.2.RELEASE</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.177</version>
@@ -182,7 +187,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.6</version>
+            <version>5.1.26</version>
         </dependency>
 
 
@@ -226,16 +231,21 @@
         </dependency>
 
         <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <!--<dependency>
             <groupId>com.googlecode.javacv</groupId>
             <artifactId>javacv</artifactId>
             <version>0.3</version>
-        </dependency>
-      <!--  <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>javacv</artifactId>
-            <version>0.8</version>
-        </dependency>
--->
+        </dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.bytedeco</groupId>-->
+            <!--<artifactId>javacv</artifactId>-->
+            <!--<version>0.8</version>-->
+        <!--</dependency>-->
 
     </dependencies>
     <build>

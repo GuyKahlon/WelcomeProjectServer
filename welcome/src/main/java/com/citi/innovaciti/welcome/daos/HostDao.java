@@ -28,4 +28,8 @@ public class HostDao {
     public long getHostsCount(){
         return hostRepository.count();
     }
+
+    public Host findById(long id){
+        return hostRepository.findOne(id);
+    }
 }

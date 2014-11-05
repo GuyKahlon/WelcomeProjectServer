@@ -29,4 +29,12 @@ public class GuestDao {
     public long getGuestsCount(){
         return guestRepository.count();
     }
+
+    public Guest findById(long id){
+        return guestRepository.findOne(id);
+    }
+
+    public List<Guest> getAllGuests(){
+        return guestRepository.findAll();
+    }
 }

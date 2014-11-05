@@ -1,5 +1,13 @@
 package com.citi.innovaciti.welcome.web;
 
+import com.citi.innovaciti.welcome.daos.GuestDao;
+import com.citi.innovaciti.welcome.daos.HostDao;
+import com.citi.innovaciti.welcome.domain.Guest;
+import com.citi.innovaciti.welcome.domain.Host;
+import com.citi.innovaciti.welcome.services.EmailSenderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +30,18 @@ import java.util.Map;
 @Controller
 public class NotificationController {
 
+    private final static Logger logger = LoggerFactory.getLogger(NotificationController.class);
+
+    @Autowired
+    EmailSenderService emailSenderService;
+
+    @Autowired
+    GuestDao guestDao;
+
+    @Autowired
+    HostDao hostDao;
+
+
 
     @RequestMapping(method = RequestMethod.POST)
     public
@@ -31,7 +51,35 @@ public class NotificationController {
 
         Map<String, Object> model = new HashMap<String, Object>();
 
-        model.put("notification", "mock notification was sent from host "+hostId+" to guest "+guestId);
+        Guest guest = guestDao.findById(guestId);
+
+        if(guest == null){
+            String errMsg = "Received a guest ID that doesn't exist: "+guestId;
+            logger.error(errMsg);
+            model.put("errMsg",errMsg);
+            return model;
+        }
+
+        Host host = hostDao.findById(hostId);
+
+        if(host == null){
+            String errMsg = "Received a Host ID that doesn't exist: "+hostId;
+            logger.error(errMsg);
+            model.put("errMsg",errMsg);
+            return model;
+        }
+
+        String emailBody = new StringBuilder("Hello ").append(host.getFirstName()).append(",\n")
+                .append(guest.getFirstName()).append(" ").append(guest.getLastName()).append(" (cell phone: ")
+                .append(guest.getPhoneNumber()).append(")")
+                .append(" is waiting for you at the Reception.").toString();
+
+
+        logger.info("sending email to host "+hostId);
+
+        emailSenderService.sendPreConfiguredMail(emailBody);
+
+        model.put("notification", " Notification was sent from host "+hostId+" to guest "+guestId);
 
         return model;
     }

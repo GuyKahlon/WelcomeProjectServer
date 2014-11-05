@@ -7,15 +7,11 @@
     <context:annotation-config/>
     <jpa:repositories base-package="com.citi.innovaciti.welcome.repositories"/>
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.h2.Driver"/>
-        <property name="url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"/>
-       <!-- <property name="url" value="jdbc:h2:test"/>-->
-        <!--<property name="url" value="jdbc:h2:file:h2\db"/>-->
-        <!--<property name="url" value="./test"/>-->
-        <!--<property name="url" value="jdbc:h2:database/~test"/>-->
-        <property name="username" value="sa"/>
-        <property name="password" value=""/>
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3728/welcome"/>
+        <property name="username" value="root"/>
+        <property name="password" value="Are1200"/>
     </bean>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -24,8 +20,7 @@
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
                 <property name="generateDdl" value="true"/>
                 <property name="showSql" value="true"/>
-                <property name="databasePlatform" value="org.hibernate.dialect.H2Dialect"/>
-                <!--<property name="database" value="H2"/>-->
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
             </bean>
         </property>
 
@@ -37,6 +32,27 @@
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com"/>
+        <property name="port" value="25"/>
+        <property name="username" value="netzer.liron@gmail.com"/>
+        <property name="password" value="setPasswordHere"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="preConfiguredMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="to" value="guykahlon@gmail.com"></property>
+        <property name="from" value="netzer.liron@gmail.com"></property>
+        <property name="subject" value="You have a Guest that is waiting at the reception !!!"/>
     </bean>
 
 
