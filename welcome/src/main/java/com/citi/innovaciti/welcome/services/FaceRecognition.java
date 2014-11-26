@@ -1,4 +1,6 @@
-package com.citi.innovaciti.welcome.services;/*
+/*
+package com.citi.innovaciti.welcome.services;*/
+/*
  * FaceRecognition.java
  *
  * Created on Dec 7, 2011, 1:27:25 PM
@@ -30,7 +32,8 @@ package com.citi.innovaciti.welcome.services;/*
  * You should have received a copy of the GNU General Public License
  * along with JavaCV.  If not, see <http://www.gnu.org/licenses/>.
  *
- */
+ *//*
+
 
 import com.citi.innovaciti.welcome.domain.Guest;
 import com.googlecode.javacpp.FloatPointer;
@@ -47,57 +50,81 @@ import static com.googlecode.javacv.cpp.opencv_highgui.*;
 //import static org.bytedeco.javacpp.opencv_core.*;
 //import static org.bytedeco.javacpp.opencv_highgui.*;
 
+*/
 /**
  * Recognizes faces.
  *
  * @author reed
- */
+ *//*
+
 public class FaceRecognition {
 
-    /**
+    */
+/**
      * the logger
-     */
+     *//*
+
     private static final Logger LOGGER = Logger.getLogger(FaceRecognition.class.getName());
-    /**
+    */
+/**
      * the number of training faces
-     */
+     *//*
+
     private int nTrainFaces = 0;
-    /**
+    */
+/**
      * the training face image array
-     */
+     *//*
+
     IplImage[] trainingFaceImgArr;
 
-    /**
+    */
+/**
      * the person number array
-     */
+     *//*
+
     CvMat personNumTruthMat;
-    /**
+    */
+/**
      * the number of persons
-     */
+     *//*
+
     int nPersons;
-    /**
+    */
+/**
      * the person names
-     */
+     *//*
+
     final List<String> personNames = new ArrayList<String>();
-    /**
+    */
+/**
      * the number of eigenvalues
-     */
+     *//*
+
     int nEigens = 0;
-    /**
+    */
+/**
      * eigenvectors
-     */
+     *//*
+
     IplImage[] eigenVectArr;
-    /**
+    */
+/**
      * eigenvalues
-     */
+     *//*
+
     CvMat eigenValMat;
-    /**
+    */
+/**
      * the average image
-     */
+     *//*
+
     IplImage pAvgTrainImg;
-    /**
+    */
+/**
      * the projected training faces
-     */
+     *//*
+
     CvMat projectedTrainFaceMat;
 
 
@@ -108,9 +135,11 @@ public class FaceRecognition {
 
     public static final String rootDir = "C:/Users/Liron/welcomeProject2/WelcomeProjectServer/welcome/src/main/resources/";
 
-    /**
+    */
+/**
      * Constructs a new FaceRecognition instance.
-     */
+     *//*
+
     public FaceRecognition(String trainingDBPath, List<Guest> guests) {
         this.trainingDBPath = trainingDBPath;
         loadTrainingData();
@@ -118,9 +147,11 @@ public class FaceRecognition {
 
     }
 
-    /**
+    */
+/**
      * Trains from the data in the given training text index file, and store the trained data into the file trainingDBPath.
-     */
+     *//*
+
     public void learn(List<Guest> allGuests) {
         int i;
 
@@ -203,9 +234,11 @@ public class FaceRecognition {
 
         // load the saved training data
         //trainPersonNumMat = loadTrainingData();
-       /* if (personNumTruthMat == null) {
+       */
+/* if (personNumTruthMat == null) {
             return null;
-        }*/
+        }*//*
+
 
         if (projectedTrainFaceMat== null) {
             return null;
@@ -239,11 +272,13 @@ public class FaceRecognition {
 
     }
 
-    /**
+    */
+/**
      * Reads the names & image filenames of people from a text file, and loads all those images listed.
      *
      * @return the face image array
-     */
+     *//*
+
     private IplImage[] loadFaceImgArray(List<Guest> allGuests) {
         IplImage[] faceImgArr;
         String imgFilename;
@@ -331,9 +366,11 @@ public class FaceRecognition {
 
     }
 
-    /**
+    */
+/**
      * Does the Principal Component Analysis, finding the average image and the eigenfaces that represent any image in the given dataset.
-     */
+     *//*
+
     private void doPCA() {
         int i;
         CvTermCriteria calcLimit;
@@ -396,9 +433,11 @@ public class FaceRecognition {
                 null); // mask
     }
 
-    /**
+    */
+/**
      * Stores the training data to the file trainingDBPath.
-     */
+     *//*
+
     private void storeTrainingData() {
         CvFileStorage fileStorage;
         int i;
@@ -469,11 +508,13 @@ public class FaceRecognition {
         cvReleaseFileStorage(fileStorage);
     }
 
-    /**
+    */
+/**
      * Opens the training data from the file trainingDBPath.
      *
      * @return the person numbers during training, or null if not successful
-     */
+     *//*
+
     private CvMat loadTrainingData() {
         LOGGER.info("loading training data");
         CvMat pTrainPersonNumMat = null; // the person numbers during training
@@ -580,9 +621,11 @@ public class FaceRecognition {
         return pTrainPersonNumMat;
     }
 
-    /**
+    */
+/**
      * Saves all the eigenvectors as images, so that they can be checked.
-     */
+     *//*
+
     private void storeEigenfaceImages() {
         // Store the average image to a file
         LOGGER.info("Saving the image of the average face as 'data/out_averageImage.bmp'");
@@ -628,12 +671,14 @@ public class FaceRecognition {
         }
     }
 
-    /**
+    */
+/**
      * Converts the given float image to an unsigned character image.
      *
      * @param srcImg the given float image
      * @return the unsigned character image
-     */
+     *//*
+
     private IplImage convertFloatImageToUcharImage(IplImage srcImg) {
         IplImage dstImg;
         if ((srcImg != null) && (srcImg.width() > 0 && srcImg.height() > 0)) {
@@ -658,13 +703,15 @@ public class FaceRecognition {
         return null;
     }
 
-    /**
+    */
+/**
      * Find the most likely person based on a detection. Returns the index, and stores the confidence value into pConfidence.
      *
      * @param projectedTestFace  the projected test face
      * @param pConfidencePointer a pointer containing the confidence value
      * @return the index
-     */
+     *//*
+
     private int findNearestNeighbor(float projectedTestFace[], FloatPointer pConfidencePointer) {
         double leastDistSq = Double.MAX_VALUE;
         int i = 0;
@@ -707,12 +754,14 @@ public class FaceRecognition {
         return iNearest;
     }
 
-    /**
+    */
+/**
      * Returns a string representation of the given float array.
      *
      * @param floatArray the given float array
      * @return a string representation of the given float array
-     */
+     *//*
+
     private String floatArrayToString(final float[] floatArray) {
         final StringBuilder stringBuilder = new StringBuilder();
         boolean isFirst = true;
@@ -730,12 +779,14 @@ public class FaceRecognition {
         return stringBuilder.toString();
     }
 
-    /**
+    */
+/**
      * Returns a string representation of the given float pointer.
      *
      * @param floatPointer the given float pointer
      * @return a string representation of the given float pointer
-     */
+     *//*
+
     private String floatPointerToString(final FloatPointer floatPointer) {
         final StringBuilder stringBuilder = new StringBuilder();
         boolean isFirst = true;
@@ -753,12 +804,14 @@ public class FaceRecognition {
         return stringBuilder.toString();
     }
 
-    /**
+    */
+/**
      * Returns a string representation of the given one-channel CvMat object.
      *
      * @param cvMat the given CvMat object
      * @return a string representation of the given CvMat object
-     */
+     *//*
+
     public String oneChannelCvMatToString(final CvMat cvMat) {
         //Preconditions
         if (cvMat.channels() != 1) {
@@ -786,3 +839,4 @@ public class FaceRecognition {
         return s.toString();
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.citi.innovaciti.welcome.services;
 
 import com.citi.innovaciti.welcome.daos.GuestDao;
@@ -8,13 +9,15 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+*/
 /**
  * Created with IntelliJ IDEA.
  * User: Liron
  * Date: 21/08/14
  * Time: 16:30
  * To change this template use File | Settings | File Templates.
- */
+ *//*
+
 @Service
 public class FaceRecognizerService {
 
@@ -28,7 +31,7 @@ public class FaceRecognizerService {
     private GuestDao guestDao;
 
 
-    @PostConstruct
+   @PostConstruct
     private void init() {
         faceRecognition = new FaceRecognition(trainingDBPath, guestDao.getAllGuests());
     }
@@ -46,3 +49,4 @@ public class FaceRecognizerService {
 
 
 }
+*/

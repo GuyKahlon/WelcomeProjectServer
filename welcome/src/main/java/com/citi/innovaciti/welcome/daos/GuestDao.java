@@ -41,4 +41,9 @@ public class GuestDao {
     public List<Guest> findByPhoneNumber(String phoneNumber){
         return guestRepository.findByPhoneNumber(phoneNumber);
     }
+
+    public long countGuestsByPhoneNumber(String phoneNumber){
+        return guestRepository.countByPhoneNumber(phoneNumber);
+
+    }
 }

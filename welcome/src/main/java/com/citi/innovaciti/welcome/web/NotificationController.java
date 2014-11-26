@@ -2,8 +2,10 @@ package com.citi.innovaciti.welcome.web;
 
 import com.citi.innovaciti.welcome.daos.GuestDao;
 import com.citi.innovaciti.welcome.daos.HostDao;
+import com.citi.innovaciti.welcome.daos.VisitDao;
 import com.citi.innovaciti.welcome.domain.Guest;
 import com.citi.innovaciti.welcome.domain.Host;
+import com.citi.innovaciti.welcome.domain.Visit;
 import com.citi.innovaciti.welcome.services.EmailSenderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,13 +35,16 @@ public class NotificationController {
     private final static Logger logger = LoggerFactory.getLogger(NotificationController.class);
 
     @Autowired
-    EmailSenderService emailSenderService;
+    private EmailSenderService emailSenderService;
 
     @Autowired
-    GuestDao guestDao;
+    private GuestDao guestDao;
 
     @Autowired
-    HostDao hostDao;
+    private HostDao hostDao;
+
+    @Autowired
+    private VisitDao visitDao;
 
 
 
@@ -74,6 +79,12 @@ public class NotificationController {
                 .append(guest.getPhoneNumber()).append(")")
                 .append(" is waiting for you at the Reception.").toString();
 
+        //log the visit to the DB
+        logger.info("Persisting visit to DB ");
+        Visit visit = new Visit();
+        visit.setGuest(guest);
+        visit.setHost(host);
+        visitDao.save(visit);
 
         logger.info("sending email to host "+hostId);
 

@@ -10,7 +10,9 @@ import java.util.List;
  */
 public interface GuestRepository extends JpaRepository<Guest,Long> {
 
-    List<Guest> findByFirstName(String firstName);
+    public List<Guest> findByFirstName(String firstName);
 
-    List<Guest> findByPhoneNumber(String phoneNumber);
+    public List<Guest> findByPhoneNumber(String phoneNumber);
+
+    public long countByPhoneNumber(String phoneNumber);
 }

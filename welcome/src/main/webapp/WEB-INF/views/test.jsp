@@ -9,19 +9,13 @@
 <h1>
 	Test Guest
 </h1>
-<input id="searchGuestIdo" type="submit" value="Search Guest Ido"/>
-<br/>
-<input id="searchGuestGuy" type="submit" value="Search Guest Guy"/>
-<br/>
-<input id="searchGuestLiron" type="submit" value="Search Guest Liron"/>
+
 <br/>
 <input id="createGuestIdo" type="submit" value="Create Guest Ido"/>
 <br/>
 <input id="createGuestGuy" type="submit" value="Create Guest Guy"/>
 <br/>
 <input id="createGuestLiron" type="submit" value="Create Guest Liron"/>
-<br/>
-<input id="createGuestKfir" type="submit" value="Create Guest Kfir"/>
 <br/>
 <input id="sendNotification" type="submit" value="Send Notification"/>
 <br/>
@@ -48,6 +42,10 @@
 
              $("#createGuestIdo").click(function() {
 
+                  var imgElem = document.getElementById('img');
+
+                  var imgData = (getBase64Image(imgElem));
+
                  $.ajax({
 
                                  type:"POST",
@@ -58,7 +56,7 @@
                                      lastName:"Shaked",
                                      email:"Ido@gmail.com",
                                      phoneNumber:"1410445091911",
-                                     picUrl:"1410445091911"
+                                     base64img:imgData
                                  }),
                                  dataType: "html",
                                  success:function (responseText) {
@@ -71,6 +69,10 @@
 
                   $("#createGuestGuy").click(function() {
 
+                           var imgElem = document.getElementById('imgGuy');
+                           var imgData = (getBase64Image(imgElem));
+
+
                               $.ajax({
 
                                               type:"POST",
@@ -80,8 +82,8 @@
                                                   firstName:"Guy",
                                                   lastName:"Kahlon",
                                                   email:"guy@gmail.com",
-                                                  phoneNumber:"0545791818",
-                                                  picUrl:"1408897425463"
+                                                  phoneNumber:"0509944364",
+                                                  base64img:imgData
                                               }),
                                               dataType: "html",
                                               success:function (responseText) {
@@ -92,31 +94,11 @@
 
                           });
 
-                                  $("#createGuestKfir").click(function() {
-
-                                                        $.ajax({
-
-                                                                        type:"POST",
-                                                                        url:"/guests",
-                                                                        contentType:"application/json",
-                                                                        data:JSON.stringify({
-                                                                            firstName:"Kfir",
-                                                                            lastName:"Tishbi",
-                                                                            email:"kfir@gmail.com",
-                                                                            phoneNumber:"0545791818",
-                                                                            picUrl:"1415187436469"
-                                                                        }),
-                                                                        dataType: "html",
-                                                                        success:function (responseText) {
-                                                                            $("body").html(responseText);
-                                                                        }
-                                                                    });
-
-
-                                                    });
                    $("#createGuestLiron").click(function() {
+                     var imgElem = document.getElementById('imgLiron');
+                     var imgData = (getBase64Image(imgElem));
 
-                                                                          $.ajax({
+                                                                        $.ajax({
 
                                                                                           type:"POST",
                                                                                           url:"/guests",
@@ -126,7 +108,7 @@
                                                                                               lastName:"Netzer",
                                                                                               email:"liron@gmail.com",
                                                                                               phoneNumber:"0545791818",
-                                                                                              picUrl:"1234567891234"
+                                                                                              base64img:imgData
                                                                                           }),
                                                                                           dataType: "html",
                                                                                           success:function (responseText) {
@@ -143,7 +125,7 @@
                               $.ajax({
 
                                               type:"POST",
-                                              url:"/notifications?hostId=2&guestId=1",
+                                              url:"/notifications?hostId=3&guestId=1",
                                               contentType:"application/json",
                                               dataType: "html",
                                               success:function (responseText) {
@@ -153,80 +135,6 @@
 
 
                           });
-
-
-                 $("#searchGuestIdo").click(function() {
-
-                    var imgElem = document.getElementById('img');
-                    var imgElem2 = document.getElementById('img2');
-                    var imgElem3 = document.getElementById('img3');
-                    var imgData = (getBase64Image(imgElem));
-                    var imgData2 = (getBase64Image(imgElem2));
-                    var imgData3 = (getBase64Image(imgElem3));
-                     //alert(imgData);
-                               $.ajax({
-
-                                              type:"POST",
-                                              url:"/guests/search",
-                                              contentType:"application/json",
-                                              data:JSON.stringify( {pictures: [imgData,imgData2,imgData3]}),
-                                              dataType: "html",
-                                              success:function (responseText) {
-                                                $("body").html(responseText);
-                                              }
-                                });
-
-
-                  });
-
-                     $("#searchGuestLiron").click(function() {
-
-                                      var imgElem = document.getElementById('imgLiron');
-                                      var imgElem2 = document.getElementById('imgLiron2');
-                                      var imgElem3 = document.getElementById('imgLiron3');
-                                      var imgData = (getBase64Image(imgElem));
-                                      var imgData2 = (getBase64Image(imgElem2));
-                                      var imgData3 = (getBase64Image(imgElem3));
-                                       //alert(imgData);
-                                                 $.ajax({
-
-                                                                type:"POST",
-                                                                url:"/guests/search",
-                                                                contentType:"application/json",
-                                                                data:JSON.stringify( {pictures: [imgData,imgData2,imgData3]}),
-                                                                dataType: "html",
-                                                                success:function (responseText) {
-                                                                  $("body").html(responseText);
-                                                                }
-                                                  });
-
-
-                                    });
-
-
-                      $("#searchGuestGuy").click(function() {
-
-                                                                          var imgElem = document.getElementById('imgGuy');
-                                                                          var imgElem2 = document.getElementById('imgGuy2');
-                                                                          var imgElem3 = document.getElementById('imgGuy3');
-                                                                          var imgData = (getBase64Image(imgElem));
-                                                                          var imgData2 = (getBase64Image(imgElem2));
-                                                                          var imgData3 = (getBase64Image(imgElem3));
-                                                                           //alert(imgData);
-                                                                                     $.ajax({
-
-                                                                                                    type:"POST",
-                                                                                                    url:"/guests/search",
-                                                                                                    contentType:"application/json",
-                                                                                                    data:JSON.stringify( {pictures: [imgData,imgData2,imgData3]}),
-                                                                                                    dataType: "html",
-                                                                                                    success:function (responseText) {
-                                                                                                      $("body").html(responseText);
-                                                                                                    }
-                                                                                      });
-
-
-                                                                        });
 
 
 
