@@ -27,7 +27,7 @@ public class InitModel {
     @PostConstruct
     private void init() {
 
-       /* Host host = new Host();
+/*        Host host = new Host();
         host.setFirstName("Dana");
         host.setLastName("Adini");
         host.setPhoneNumber("05489231");
@@ -41,24 +41,24 @@ public class InitModel {
 
         Host host3 = new Host();
         host3.setFirstName("Moshe");
-        host3.setLastName("PeReTz");
+        host3.setLastName("Peretz");
         host3.setPhoneNumber("0528936314");
         hostDao.save(host3);
 
         Host host4 = new Host();
-        host4.setFirstName("SHLOMO");
+        host4.setFirstName("Shlomo");
         host4.setLastName("Artzi");
         host4.setPhoneNumber("00000000");
         hostDao.save(host4);
 
         Host host5 = new Host();
-        host5.setFirstName("SaRiT");
+        host5.setFirstName("Sarit");
         host5.setLastName("Hadad");
         hostDao.save(host5);
 
         Host host6 = new Host();
         host6.setFirstName("Yudit");
-        host6.setLastName("RAVITZ");
+        host6.setLastName("Ravitz");
         hostDao.save(host6);*/
 
 

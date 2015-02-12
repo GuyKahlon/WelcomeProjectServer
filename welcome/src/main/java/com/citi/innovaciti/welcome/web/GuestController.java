@@ -75,6 +75,7 @@ public class GuestController {
 
         }
 
+        log.info("Returning guest: "+guests.get(0).toString());
         model.put("guest", guests.get(0));
 
         return model;
@@ -156,6 +157,8 @@ public class GuestController {
                 } else {
 
                     Guest dbGuest = guestDao.save(guest);
+                    dbGuest.setBase64img(null);//todo: this is a hack, so that the image will not be returned to the UI
+                    dbGuest.setPicture(null);
                     model.put("guest", dbGuest);
                 }
 
