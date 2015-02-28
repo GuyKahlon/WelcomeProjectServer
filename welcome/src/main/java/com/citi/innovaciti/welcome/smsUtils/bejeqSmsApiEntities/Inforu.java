@@ -21,13 +21,13 @@ public class Inforu {
 
     private Content Content;
 
-    public Inforu(String username, String password, String senderPhoneNumber,
+    public Inforu(String username, String password, String senderPhoneNumber, String senderName,
                   String recipientPhoneNumber, String message) {
 
         this.User = new User(username, password);
         this.Content = new Content(message);
         this.Recipients = new Recipients(recipientPhoneNumber);
-        this.Settings = new Settings(senderPhoneNumber);
+        this.Settings = new Settings(senderPhoneNumber, senderName);
     }
 
 

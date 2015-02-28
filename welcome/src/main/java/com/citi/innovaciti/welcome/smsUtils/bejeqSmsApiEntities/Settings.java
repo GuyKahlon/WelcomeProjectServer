@@ -10,9 +10,11 @@ package com.citi.innovaciti.welcome.smsUtils.bejeqSmsApiEntities;
 public class Settings {
 
     private String SenderNumber;
+    private String SenderName;
 
-    public Settings(String senderNumber) {
+    public Settings(String senderNumber, String senderName) {
         SenderNumber = senderNumber;
+        SenderName = senderName;
     }
 
     public String getSenderNumber() {
@@ -21,5 +23,13 @@ public class Settings {
 
     public void setSenderNumber(String senderNumber) {
         SenderNumber = senderNumber;
+    }
+
+    public String getSenderName() {
+        return SenderName;
+    }
+
+    public void setSenderName(String senderName) {
+        SenderName = senderName;
     }
 }

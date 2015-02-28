@@ -75,7 +75,7 @@ public class GuestController {
 
         }
 
-        log.info("Returning guest: "+guests.get(0).toString());
+        log.info("searchByPhoneNumber method is returning guest: "+guests.get(0).toString());
         model.put("guest", guests.get(0));
 
         return model;

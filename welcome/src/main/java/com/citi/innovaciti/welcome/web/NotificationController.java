@@ -87,11 +87,18 @@ public class NotificationController {
 
         logger.info("Sending SMS to host "+host.toString()+" with the following message:\n"+notificationMessage);
 
-        smsService.sendSms(host.getPhoneNumber(), notificationMessage);
+        boolean smsSentSuccessfully = smsService.sendSms(host.getPhoneNumber(), notificationMessage);
 
-        logger.info("An SMS was sent to host "+host.toString());
+        if(smsSentSuccessfully){
 
-        model.put("notification", " Notification was sent from host "+hostId+" to guest "+guestId);
+            logger.info("An SMS was sent to host "+host.toString());
+            model.put("notification", " Notification was sent to host "+hostId+" regarding guest "+guestId);
+
+        } else{
+            String errMsgPrefix = "Failed to send SMS to host ";
+            logger.error(errMsgPrefix+ host.toString()+" regarding guest "+guest.toString());
+            model.put("errMsg", errMsgPrefix + hostId+ " regarding guest "+guestId);
+        }
 
         return model;
     }
