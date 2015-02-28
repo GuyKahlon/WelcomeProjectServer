@@ -61,4 +61,14 @@ public class Host {
     public void setPicUrl(String picUrl) {
         this.picUrl = picUrl;
     }
+
+    @Override
+    public String toString() {
+        return "Host{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
 }

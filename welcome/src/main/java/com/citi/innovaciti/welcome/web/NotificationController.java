@@ -6,7 +6,7 @@ import com.citi.innovaciti.welcome.daos.VisitDao;
 import com.citi.innovaciti.welcome.domain.Guest;
 import com.citi.innovaciti.welcome.domain.Host;
 import com.citi.innovaciti.welcome.domain.Visit;
-import com.citi.innovaciti.welcome.services.EmailSenderService;
+import com.citi.innovaciti.welcome.services.SmsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class NotificationController {
     private final static Logger logger = LoggerFactory.getLogger(NotificationController.class);
 
     @Autowired
-    private EmailSenderService emailSenderService;
+    private SmsService smsService;
 
     @Autowired
     private GuestDao guestDao;
@@ -74,10 +74,6 @@ public class NotificationController {
             return model;
         }
 
-        String emailBody = new StringBuilder("Hello ").append(host.getFirstName()).append(",\n")
-                .append(guest.getFirstName()).append(" ").append(guest.getLastName()).append(" (cell phone: ")
-                .append(guest.getPhoneNumber()).append(")")
-                .append(" is waiting for you at the Reception.").toString();
 
         //log the visit to the DB
         logger.info("Persisting visit to DB ");
@@ -86,13 +82,25 @@ public class NotificationController {
         visit.setHost(host);
         visitDao.save(visit);
 
-        logger.info("sending email to host "+hostId);
 
-        emailSenderService.sendPreConfiguredMail(emailBody);
+        String notificationMessage = getNotificationMessage(guest, host);
+
+        logger.info("Sending SMS to host "+host.toString()+" with the following message "+notificationMessage);
+
+        smsService.sendSms(host.getPhoneNumber(), notificationMessage);
+
+        logger.info("An SMS was sent to host "+host.toString());
 
         model.put("notification", " Notification was sent from host "+hostId+" to guest "+guestId);
 
         return model;
+    }
+
+    private String getNotificationMessage(Guest guest, Host host) {
+        return new StringBuilder("Hello ").append(host.getFirstName()).append(",\n")
+                    .append(guest.getFirstName()).append(" ").append(guest.getLastName()).append(" (cell phone: ")
+                    .append(guest.getPhoneNumber()).append(")")
+                    .append(" is waiting for you at the Reception.").toString();
     }
 
 
