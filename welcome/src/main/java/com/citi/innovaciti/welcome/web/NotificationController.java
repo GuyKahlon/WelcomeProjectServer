@@ -74,7 +74,6 @@ public class NotificationController {
             return model;
         }
 
-
         //log the visit to the DB
         logger.info("Persisting visit to DB ");
         Visit visit = new Visit();
@@ -82,12 +81,7 @@ public class NotificationController {
         visit.setHost(host);
         visitDao.save(visit);
 
-
-        String notificationMessage = getNotificationMessage(guest, host);
-
-        logger.info("Sending SMS to host "+host.toString()+" with the following message:\n"+notificationMessage);
-
-        boolean smsSentSuccessfully = smsService.sendSms(host.getPhoneNumber(), notificationMessage);
+        boolean smsSentSuccessfully = smsService.sendSmsToHostRegardingWaitingGuest(host, guest);
 
         if(smsSentSuccessfully){
 
@@ -95,19 +89,13 @@ public class NotificationController {
             model.put("notification", " Notification was sent to host "+hostId+" regarding guest "+guestId);
 
         } else{
+
             String errMsgPrefix = "Failed to send SMS to host ";
             logger.error(errMsgPrefix+ host.toString()+" regarding guest "+guest.toString());
             model.put("errMsg", errMsgPrefix + hostId+ " regarding guest "+guestId);
         }
 
         return model;
-    }
-
-    private String getNotificationMessage(Guest guest, Host host) {
-        return new StringBuilder("Hello ").append(host.getFirstName()).append(",\n")
-                    .append(guest.getFirstName()).append(" ").append(guest.getLastName()).append(" (cell phone: ")
-                    .append(guest.getPhoneNumber()).append(")")
-                    .append(" is waiting for you at the Reception.").toString();
     }
 
 

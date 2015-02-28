@@ -1,5 +1,7 @@
 package com.citi.innovaciti.welcome.services;
 
+import com.citi.innovaciti.welcome.domain.Guest;
+import com.citi.innovaciti.welcome.domain.Host;
 import com.citi.innovaciti.welcome.smsUtils.bejeqSmsApiEntities.Inforu;
 import com.citi.innovaciti.welcome.smsUtils.bejeqSmsApiEntities.Result;
 import com.thoughtworks.xstream.XStream;
@@ -11,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.text.MessageFormat;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,6 +44,9 @@ public class SmsService {
     @Value("${sms.default.sender.name}")
     private String smsDefaultSenderName;
 
+    @Value("${sms.host.notification.message.template}")
+    private String hostNotificationMessageTemplate;
+
     private RestTemplate restTemplate;
     private XStream xstream;
 
@@ -49,6 +56,19 @@ public class SmsService {
         xstream = new XStream();
         xstream.processAnnotations(Inforu.class);
         xstream.processAnnotations(Result.class);
+    }
+
+
+    public boolean sendSmsToHostRegardingWaitingGuest(Host host, Guest guest){
+
+        String message = MessageFormat.format(
+                hostNotificationMessageTemplate,
+                host.getFirstName(),
+                guest.getFullName(),guest.getFirstName(), guest.getPhoneNumber());
+
+        log.info("Sending SMS to host "+host.toString()+" with the following message:\n"+message);
+
+        return sendSms(host.getPhoneNumber(), message);
     }
 
 

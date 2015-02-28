@@ -1,6 +1,8 @@
 package com.citi.innovaciti.welcome.domain;
 
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -68,7 +70,6 @@ public class Guest {
         this.email = email;
     }
 
-
     public String getBase64img() {
         return base64img;
     }
@@ -94,5 +95,11 @@ public class Guest {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+
+    @JsonIgnore
+    public String getFullName(){
+        return firstName+" "+lastName;
     }
 }
