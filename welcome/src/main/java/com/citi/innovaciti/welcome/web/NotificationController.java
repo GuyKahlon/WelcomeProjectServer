@@ -85,7 +85,7 @@ public class NotificationController {
 
         String notificationMessage = getNotificationMessage(guest, host);
 
-        logger.info("Sending SMS to host "+host.toString()+" with the following message "+notificationMessage);
+        logger.info("Sending SMS to host "+host.toString()+" with the following message:\n"+notificationMessage);
 
         smsService.sendSms(host.getPhoneNumber(), notificationMessage);
 

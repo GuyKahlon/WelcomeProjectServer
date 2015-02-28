@@ -5,6 +5,7 @@ import com.thoughtworks.xstream.XStream;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,17 +23,23 @@ public class SmsService {
 
     private final static Logger log = LoggerFactory.getLogger(SmsService.class);
 
-    private static String baseUrl = "https://api.b-sms.co.il/SendMessageXml.ashx?InforuXML=";
+    private static final String baseUrl = "https://api.b-sms.co.il/SendMessageXml.ashx?InforuXML=";
 
-    public static final String SMS_SERVICE_USERNAME = "Insert username here";
-    public static final String SMS_SERVICE_PASSWORD = "Insert password here";
+    @Value("${sms.service.username}")
+    private String smsServiceUsername;
+
+    @Value("${sms.service.password}")
+    private String smsServicePassword;
+
+    @Value("${sms.default.sender.phone.number}")
+    private String smsDefaultSenderPhoneNumber;
 
     private RestTemplate restTemplate;
     private XStream xstream;
 
     public SmsService() {
 
-        this.restTemplate = new RestTemplate();
+        restTemplate = new RestTemplate();
         xstream = new XStream();
         xstream.processAnnotations(Inforu.class);
     }
@@ -42,17 +49,18 @@ public class SmsService {
         //the message will be contained in an XML, so escape it
         String escapedMessageForXml = StringEscapeUtils.escapeXml10(message);
 
-        Inforu inforu = new Inforu(SMS_SERVICE_USERNAME, SMS_SERVICE_PASSWORD, "0528967231", recipientPhoneNumber, escapedMessageForXml);
+        Inforu inforu = new Inforu(smsServiceUsername, smsServicePassword, smsDefaultSenderPhoneNumber, recipientPhoneNumber, escapedMessageForXml);
 
         String inforuAsXml = xstream.toXML(inforu);
 
-        log.info("Sending an SMS to : " + recipientPhoneNumber);
+        log.info("Sending an SMS to: " + recipientPhoneNumber);
 
         ResponseEntity<String> response = restTemplate.postForEntity(baseUrl + inforuAsXml, null, String.class);
 
         HttpStatus httpStatus = response.getStatusCode();
 
-        log.info("Recived the following Http status for the SMS request: "+httpStatus);
+        log.info("Received the following Http status for the SMS request: "+httpStatus+
+                " and the following response:\n"+response.getBody());
 
 
     }
