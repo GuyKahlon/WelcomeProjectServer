@@ -7,11 +7,21 @@
 	<title>Hosts Management</title>
 </head>
 <body>
-<h3>Upload Hosts File</h3>
+<h3>Override DB hosts with hosts in Excel file</h3>
+<p>Expected Excel file format:
+<ul>
+<li>First column: first name</li>
+<li>Second column: last name</li>
+<li>Third column: email</li>
+<li>Forth column: phone-number</li>
+</ul></p><br/>
+<p>The result of this action would be, that all hosts the exist in the DB, but not in the file, will be Deactivated.<br/>
+Hosts that exist both in the DB and in the file will be updated according to file.<br/>
+Hosts that exist in the file, but not in the DB, will be created.</p>
 
   <form method="POST" action="/hosts/overrideHosts" enctype="multipart/form-data">
         Select File to upload: <input type="file" name="file"/><br/><br/>
-        <input type="submit" value="Upload">
+        <input type="submit" value="Upload Excel file">
     </form>
 
  <hr>

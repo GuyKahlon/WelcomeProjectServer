@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Liron on 27/04/2014.
@@ -17,6 +18,8 @@ import java.util.List;
 public interface HostRepository extends JpaRepository<Host, Long> {
 
     public List<Host> findByFirstName(String firstName);
+
+    public List<Host> findByFirstNameAndLastName(String firstName, String lastName);
 
     public Page<Host> findByActive(boolean active, Pageable pageable);
 
@@ -28,4 +31,10 @@ public interface HostRepository extends JpaRepository<Host, Long> {
     @Transactional
     @Query("update Host h set h.active =:active where h.id =:hostId")
     public int setHostActiveState(@Param("active") boolean active, @Param("hostId")Long hostId);
+
+
+    @Modifying
+    @Transactional
+    @Query("update Host h set h.active = false where h.id not in :hostIds")
+    public int deactivateHostsNotInIdsSet(@Param("hostIds")Set<Long> hostIds);
 }

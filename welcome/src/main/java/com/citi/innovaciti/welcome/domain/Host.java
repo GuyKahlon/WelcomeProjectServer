@@ -98,6 +98,16 @@ public class Host {
         this.active = active;
     }
 
+
+    public void merge(Host updaterHost){
+        this.setFirstName(updaterHost.getFirstName());
+        this.setLastName(updaterHost.getLastName());
+        this.setPhoneNumber(updaterHost.getPhoneNumber());
+        this.setEmail(updaterHost.getEmail());
+        this.setActive(updaterHost.isActive());
+        this.setPicUrl(updaterHost.getPicUrl());
+    }
+
     @Override
     public String toString() {
         return "Host{" +
@@ -109,5 +119,47 @@ public class Host {
                 ", email='" + email + '\'' +
                 ", active=" + active +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Host)) return false;
+
+        Host host = (Host) o;
+
+        if (active != host.active) return false;
+        if (email != null ? !email.equals(host.email) : host.email != null) return false;
+        if (firstName != null ? !firstName.equals(host.firstName) : host.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(host.lastName) : host.lastName != null) return false;
+        if (phoneNumber != null ? !phoneNumber.equals(host.phoneNumber) : host.phoneNumber != null) return false;
+
+        return true;
+    }
+
+
+
+    public boolean equalsExceptForActive(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Host)) return false;
+
+        Host host = (Host) o;
+
+        if (email != null ? !email.equals(host.email) : host.email != null) return false;
+        if (firstName != null ? !firstName.equals(host.firstName) : host.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(host.lastName) : host.lastName != null) return false;
+        if (phoneNumber != null ? !phoneNumber.equals(host.phoneNumber) : host.phoneNumber != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = firstName != null ? firstName.hashCode() : 0;
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (active ? 1 : 0);
+        return result;
     }
 }

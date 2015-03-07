@@ -1,6 +1,7 @@
 package com.citi.innovaciti.welcome.utils;
 
 import com.citi.innovaciti.welcome.domain.Host;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -30,28 +31,43 @@ public class ExcelFileHostsExtractor {
     private static final int LAST_NAME_COLUMN_INDEX = 1;
     private static final int EMAIL_COLUMN_INDEX = 2;
     private static final int PHONE_NUMBER_COLUMN_INDEX = 3;
+    public static final String XLS = "xls";
+    public static final String XLSX = "xlsx";
 
 
-    public static List<Host> getHostsFromFile(InputStream inputStream) throws IOException{
+    public static List<Host> getHostsFromExcelFileInputStream(InputStream inputStream, String fileExtension) throws IOException {
 
         List<Host> hosts = new ArrayList<Host>();
 
+        if (!(fileExtension.equals(XLS) || fileExtension.equals(XLSX))) {
+            throw new IllegalArgumentException("File type is neither " + XLS + " nor " + XLSX);
+        }
+
         Workbook workbook = null;
+
         try {
-            workbook = new XSSFWorkbook(inputStream);
-        } catch (IOException e) {
-            log.error("Failed creating a workbook", e);
-            throw e;
+
+            if (fileExtension.equals(XLSX)) {
+
+                workbook = new XSSFWorkbook(inputStream);    //try to create a workbook for "xlsx"
+            } else {
+                workbook = new HSSFWorkbook(inputStream); //try to create a workbook for "xls"
+            }
+
+        } catch (IOException ex) {
+            log.error("Failed creating a workbook", ex);
+            throw ex;
         } finally {
             inputStream.close();
         }
+
 
         if (workbook == null) {
             log.error("workbook is null");
             throw new IllegalStateException("workbook is null");
         }
 
-        Sheet sheet = workbook.getSheetAt(0);    //maybe change to xlsx
+        Sheet sheet = workbook.getSheetAt(0);
         if (sheet == null) {
             log.error("Sheet is null");
             throw new IllegalStateException("Sheet is null");
@@ -84,13 +100,26 @@ public class ExcelFileHostsExtractor {
 
     }
 
-    private static Object getCellValue(Cell cell) {
+    private static String getCellValue(Cell cell) {
 
         if (cell == null) {
             return null;
         }
 
-        return cell.getStringCellValue();
+        String cellValue = null;
+
+        try {
+
+            cellValue = cell.getStringCellValue();
+
+        } catch (IllegalStateException e) {
+
+            if (cell.getColumnIndex() == PHONE_NUMBER_COLUMN_INDEX) {  //this column might contain a numeric vale, if so convert it to string
+                cellValue = String.valueOf((int) cell.getNumericCellValue());
+            }
+        }
+
+        return cellValue;
 
     }
 }

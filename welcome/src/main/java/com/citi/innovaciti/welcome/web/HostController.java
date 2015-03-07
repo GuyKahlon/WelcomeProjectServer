@@ -3,6 +3,7 @@ package com.citi.innovaciti.welcome.web;
 import com.citi.innovaciti.welcome.daos.HostDao;
 import com.citi.innovaciti.welcome.domain.Host;
 import com.citi.innovaciti.welcome.utils.ExcelFileHostsExtractor;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,8 +106,8 @@ public class HostController {
         boolean isSuccessfulUpdate = updateCount > 0;
         if (!isSuccessfulUpdate) {
             model.put("errMsg", "Failed to update Host Active state");
-        } else{
-            model.put("Update succeeded","");
+        } else {
+            model.put("Update succeeded", "");
         }
         return model;
     }
@@ -158,24 +159,30 @@ public class HostController {
         List<Host> hostsFromFile = null;
         try {
 
-            hostsFromFile = ExcelFileHostsExtractor.getHostsFromFile(file.getInputStream());
+            String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
+            hostsFromFile = ExcelFileHostsExtractor.getHostsFromExcelFileInputStream(file.getInputStream(), fileExtension);
 
         } catch (Exception e) {
 
-            String errMsg = "Failed to extract Hosts from file " + file.getOriginalFilename();
-            log.error(errMsg);
+            String errMsg = "Failed to extract Hosts from file " + file.getOriginalFilename()+" ("+e.getMessage()+")";
+            log.error(errMsg, e);
             model.put("errMsg", errMsg);
         }
 
 
         if (hostsFromFile != null && hostsFromFile.size() > 0) {
 
-            List<Host> savedHosts = hostDao.save(hostsFromFile);
-            log.info("Saved " + savedHosts.size() + " new Hosts to the DB");
-            model.put("hosts", savedHosts);
+            log.info("Overriding DB hosts with hosts in file");
+            int[] overrideResult = hostDao.overrideDbHostsWithGivenHosts(hostsFromFile);
+            log.info("Overridden hosts in the DB. "+overrideResult[0]+" hosts were either created or updated, "
+                    +overrideResult[1]+" hosts were deactivated");
+            model.put("Num of Hosts that were created or updated", overrideResult[0]);
+            model.put("Num of Hosts that were deactivated", overrideResult[1]);
         }
 
         return model;
 
     }
+
+
 }
