@@ -47,6 +47,9 @@ public class HomeController {
         long hostsCount = hostDao.getHostsCount();
         model.addAttribute("NumOfHosts", hostsCount);
 
+        long activeHostsCount = hostDao.getActiveHostsCount();
+        model.addAttribute("NumOfActiveHosts", activeHostsCount);
+
         long guestsCount = guestDao.getGuestsCount();
         model.addAttribute("NumOfGuests", guestsCount);
 

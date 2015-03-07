@@ -1,16 +1,19 @@
 package com.citi.innovaciti.welcome.domain;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import javax.persistence.*;
 
 /**
  * Created by Liron on 27/04/2014.
  */
 @Entity
-@Table(name = "hosts")
+@Table(name = "hosts",
+        indexes = {
+                @Index(name = "host_phoneNumber_idx", columnList = "phoneNumber", unique = true),
+                @Index(name = "host_active_idx", columnList = "active")
+        })
 public class Host {
 
     @Id
@@ -24,6 +27,23 @@ public class Host {
     private String phoneNumber;
 
     private String picUrl;
+
+    private String email;
+
+    @JsonIgnore
+    private boolean active = true; //initialized to true
+
+
+    public Host() {
+    }
+
+    public Host(String firstName, String lastName, String phoneNumber, String picUrl, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.picUrl = picUrl;
+        this.email = email;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -62,6 +82,22 @@ public class Host {
         this.picUrl = picUrl;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return "Host{" +
@@ -69,6 +105,9 @@ public class Host {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", picUrl='" + picUrl + '\'' +
+                ", email='" + email + '\'' +
+                ", active=" + active +
                 '}';
     }
 }
