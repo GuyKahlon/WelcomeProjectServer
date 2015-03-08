@@ -10,6 +10,7 @@
 <h3>Override DB hosts with hosts in Excel file</h3>
 <p>Expected Excel file format:
 <ul>
+<li>First row: header</li>
 <li>First column: first name</li>
 <li>Second column: last name</li>
 <li>Third column: email</li>

@@ -77,8 +77,10 @@ public class ExcelFileHostsExtractor {
 
         while (rows.hasNext()) {
             Row currRow = rows.next();
-            Host currHost = getHostFromRow(currRow);
-            hosts.add(currHost);
+            if (currRow.getRowNum() != 0) {  //ignore the header row
+                Host currHost = getHostFromRow(currRow);
+                hosts.add(currHost);
+            }
         }
 
         return hosts;
