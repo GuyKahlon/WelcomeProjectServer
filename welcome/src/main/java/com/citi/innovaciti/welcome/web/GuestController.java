@@ -40,7 +40,7 @@ public class GuestController {
                                    @RequestParam(value = "size", required = false, defaultValue = "100") int size) {
 
         Map<String, Object> model = new HashMap<String, Object>();
-        List<Guest> guests = guestDao.getGuests(page, size);
+        List<Guest> guests = guestDao.getGuestsMainDetails(page, size);
         model.put("guests", guests);
 
         long guestsCount = guestDao.getGuestsCount();

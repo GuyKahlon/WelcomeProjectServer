@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,8 +23,32 @@ public class GuestDao {
        return guestRepository.save(guest);
     }
 
-    public List<Guest> getGuests(int page, int size){
-        return guestRepository.findAll(new PageRequest(page,size)).getContent();
+
+    /**
+     *
+     * @param page
+     * @param size
+     * @return  a Guest object that is initialized only with the following fields:
+     *     firstName, lastName, email and phoneNumber (the rest of the fields will be null)
+     */
+    public List<Guest> getGuestsMainDetails(int page, int size){
+
+        List<Guest> guests = new ArrayList<Guest>();
+        List<Object[]> guestsAsObjects = guestRepository.findAllExcludePicture(new PageRequest(page,size));
+        if(guestsAsObjects == null){
+            return guests;
+        }
+
+        for(Object[] rawGuest: guestsAsObjects){
+            Guest guest = new Guest();
+            guest.setFirstName((String) rawGuest[0]);
+            guest.setLastName((String) rawGuest[1]);
+            guest.setEmail((String) rawGuest[2]);
+            guest.setPhoneNumber((String) rawGuest[3]);
+            guests.add(guest);
+        }
+
+        return guests;
     }
 
     public long getGuestsCount(){
