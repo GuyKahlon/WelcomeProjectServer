@@ -185,4 +185,22 @@ public class HostController {
     }
 
 
+    @RequestMapping(value = "/capitalizeHosts", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Map<String, Object> capitalizeExistingHostNames(){
+
+        Map<String, Object> model = new HashMap<String, Object>();
+
+        log.info("Capitalizing host names ");
+
+        hostDao.updateAllDbHostsToCapitalizedNames();
+
+        model.put("message", "Capitalized all host names");
+
+        return model;
+
+    }
+
+
 }

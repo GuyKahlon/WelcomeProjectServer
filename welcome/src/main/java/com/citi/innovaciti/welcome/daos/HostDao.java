@@ -2,6 +2,9 @@ package com.citi.innovaciti.welcome.daos;
 
 import com.citi.innovaciti.welcome.domain.Host;
 import com.citi.innovaciti.welcome.repositories.HostRepository;
+import org.apache.commons.lang3.text.WordUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ import java.util.Set;
 @Service
 public class HostDao {
 
+    private final static Logger log = LoggerFactory.getLogger(HostDao.class);
+
     @Autowired
     private HostRepository hostRepository;
 
@@ -24,20 +29,16 @@ public class HostDao {
         return hostRepository.save(host);
     }
 
-    public List<Host> save(List<Host> hosts) {
-        return hostRepository.save(hosts);
-    }
-
     public List<Host> getHosts(int page, int size) {
         return hostRepository.findAll(new PageRequest(page, size)).getContent();
     }
 
     public List<Host> getActiveHosts(int page, int size) {
-        return hostRepository.findByActive(true, new PageRequest(page, size)).getContent();
+        return hostRepository.findByActiveOrderByFirstNameAscLastNameAsc(true, new PageRequest(page, size)).getContent();
     }
 
     public List<Host> getInActiveHosts(int page, int size) {
-        return hostRepository.findByActive(false, new PageRequest(page, size)).getContent();
+        return hostRepository.findByActiveOrderByFirstNameAscLastNameAsc(false, new PageRequest(page, size)).getContent();
     }
 
     public long getHostsCount() {
@@ -80,6 +81,7 @@ public class HostDao {
         //the given host is a new host
         if (hostsWithSameName == null || hostsWithSameName.size() == 0) {
             //host doesn't exist, so create it
+            log.info("Creating new host "+host.getFirstName()+" "+host.getLastName());
             Host dbHost = save(host);
             return dbHost.getId();
         }
@@ -88,6 +90,7 @@ public class HostDao {
         for (Host hostFromDb : hostsWithSameName) {
             if (hostFromDb.equals(host)) {
                 //no update is needed
+                log.info("host "+host.getFirstName()+" "+host.getLastName()+" hasn't changed");
                 return hostFromDb.getId();
             }
         }
@@ -96,6 +99,7 @@ public class HostDao {
         for (Host hostFromDb : hostsWithSameName) {
             if (hostFromDb.equalsExceptForActive(host)) {
                 //update active state to active
+                log.info("updating host active state to active for "+host.getFirstName()+" "+host.getLastName());
                 setHostActiveState(true, hostFromDb.getId());
                 return hostFromDb.getId();
             }
@@ -105,6 +109,7 @@ public class HostDao {
         for (Host hostFromDb : hostsWithSameName) {
             if (hostFromDb.getEmail().equals(host.getEmail()) && !hostFromDb.getPhoneNumber().equals(host.getPhoneNumber())) {
                 //this is the same host (firstName, LastName and email are equal)
+                log.info("updating host "+host.getFirstName()+" "+host.getLastName());
                 hostFromDb.merge(host);
                 save(hostFromDb);
                 return hostFromDb.getId();
@@ -115,6 +120,7 @@ public class HostDao {
         for (Host hostFromDb : hostsWithSameName) {
             if (hostFromDb.getPhoneNumber().equals(host.getPhoneNumber()) && !hostFromDb.getEmail().equals(host.getEmail())) {
                 //this is the same host (firstName, LastName and phoneNumber are equal)
+                log.info("updating host "+host.getFirstName()+" "+host.getLastName());
                 hostFromDb.merge(host);
                 save(hostFromDb);
                 return hostFromDb.getId();
@@ -123,6 +129,7 @@ public class HostDao {
 
         //host with same firstName and LastName exist in the DB,
         // but both his email and phoneNumber are different, so create new Host
+        log.info("Creating new host "+host.getFirstName()+" "+host.getLastName());
         Host dbHost = save(host);
         return dbHost.getId();
 
@@ -147,6 +154,8 @@ public class HostDao {
 
         for (Host host : hosts) {
 
+            capitalizeHostName(host);
+
             Long hostId = createOrUpdateHost(host);
 
             hostIdsThatWereCreatedOrUpdated.add(hostId);
@@ -162,4 +171,25 @@ public class HostDao {
 
 
     }
+
+
+    private void capitalizeHostName(Host host){
+
+        host.setFirstName(WordUtils.capitalizeFully(host.getFirstName()));
+        host.setLastName(WordUtils.capitalizeFully(host.getLastName()));
+
+    }
+
+
+    public void updateAllDbHostsToCapitalizedNames(){
+
+        List<Host> dbHosts =  hostRepository.findAll();
+
+        for(Host host : dbHosts){
+            capitalizeHostName(host);
+            save(host);
+        }
+    }
+
+
 }

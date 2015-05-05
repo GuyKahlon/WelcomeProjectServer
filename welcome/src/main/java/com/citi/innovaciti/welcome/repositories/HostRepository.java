@@ -21,7 +21,7 @@ public interface HostRepository extends JpaRepository<Host, Long> {
 
     public List<Host> findByFirstNameAndLastName(String firstName, String lastName);
 
-    public Page<Host> findByActive(boolean active, Pageable pageable);
+    public Page<Host> findByActiveOrderByFirstNameAscLastNameAsc(boolean active, Pageable pageable);
 
     public long countByActive(boolean active);
 

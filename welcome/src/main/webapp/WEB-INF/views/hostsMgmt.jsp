@@ -33,6 +33,11 @@ Hosts that exist in the file, but not in the DB, will be created.</p>
  <hr>
  <h3> Deactivate Host </h3>
  <input id="deactivateHost" type="submit" value="Deactivate Host"/>
+ <br/>
+ <br/>
+ <hr>
+ <h3> Capitalize Host names </h3>
+ <input id="capitalizeHosts" type="submit" value="Capitalize Host names"/>
 
  <script type="text/javascript">
 
@@ -72,6 +77,22 @@ Hosts that exist in the file, but not in the DB, will be created.</p>
 
 
                 });
+
+
+                 $("#capitalizeHosts").click(function() {
+
+                                   $.ajax({
+                                                               type:"POST",
+                                                               url:"/hosts/capitalizeHosts",
+                                                               contentType:"application/json",
+                                                               dataType: "html",
+                                                               success:function (responseText) {
+                                                                   $("body").html(responseText);
+                                                               }
+                                           });
+
+
+                               });
 
             });
 
