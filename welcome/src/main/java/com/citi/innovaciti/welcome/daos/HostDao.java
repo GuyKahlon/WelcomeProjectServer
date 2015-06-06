@@ -95,12 +95,13 @@ public class HostDao {
             }
         }
 
-        //host exist with same properties in the DB, but is deactivated, so activate it
+        //host exist with same firstName, LastName, email and phoneNumber in the DB, so "merge" them
         for (Host hostFromDb : hostsWithSameName) {
-            if (hostFromDb.equalsExceptForActive(host)) {
-                //update active state to active
-                log.info("updating host active state to active for "+host.getFirstName()+" "+host.getLastName());
-                setHostActiveState(true, hostFromDb.getId());
+            if (hostFromDb.equalsInIdentificationProperties(host)) {
+                //update host, metadata properties are different(e.g: active state)
+                log.info("updating host "+host.getFirstName()+" "+host.getLastName());
+                hostFromDb.merge(host);
+                save(hostFromDb);
                 return hostFromDb.getId();
             }
         }

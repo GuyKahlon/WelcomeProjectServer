@@ -125,7 +125,7 @@
                               $.ajax({
 
                                               type:"POST",
-                                              url:"/notifications?hostId=3&guestId=11",
+                                              url:"/notifications?hostId=529&guestId=12&floorNum=4",
                                               contentType:"application/json",
                                               dataType: "html",
                                               success:function (responseText) {

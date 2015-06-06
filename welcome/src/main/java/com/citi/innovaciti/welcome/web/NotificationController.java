@@ -52,7 +52,8 @@ public class NotificationController {
     public
     @ResponseBody
     Map<String, Object> create(@RequestParam(value = "hostId", required = true) Long hostId,
-                               @RequestParam(value = "guestId", required = true) Long guestId) {
+                               @RequestParam(value = "guestId", required = true) Long guestId,
+                               @RequestParam(value = "floorNum", required = false) Integer floorNum) {
 
         Map<String, Object> model = new HashMap<String, Object>();
 
@@ -81,7 +82,7 @@ public class NotificationController {
         visit.setHost(host);
         visitDao.save(visit);
 
-        boolean smsSentSuccessfully = smsService.sendSmsToHostRegardingWaitingGuest(host, guest);
+        boolean smsSentSuccessfully = smsService.sendSmsToHostRegardingWaitingGuest(host, guest, floorNum);
 
         if(smsSentSuccessfully){
 

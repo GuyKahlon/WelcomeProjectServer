@@ -31,6 +31,7 @@ public class ExcelFileHostsExtractor {
     private static final int LAST_NAME_COLUMN_INDEX = 1;
     private static final int EMAIL_COLUMN_INDEX = 2;
     private static final int PHONE_NUMBER_COLUMN_INDEX = 3;
+    private static final int ACCELERATOR_MEMBER_COLUMN_INDEX = 4;
     public static final String XLS = "xls";
     public static final String XLSX = "xlsx";
 
@@ -92,12 +93,15 @@ public class ExcelFileHostsExtractor {
         String lastName = (String) getCellValue(row.getCell(LAST_NAME_COLUMN_INDEX));
         String email = (String) getCellValue(row.getCell(EMAIL_COLUMN_INDEX));
         String phoneNumber = (String) getCellValue(row.getCell(PHONE_NUMBER_COLUMN_INDEX));
+        String acceleratorMember = (String) getCellValue(row.getCell(ACCELERATOR_MEMBER_COLUMN_INDEX));
+        boolean isAcceleratorMember = Boolean.valueOf(acceleratorMember);
 
         Host host = new Host();
         host.setFirstName(firstName);
         host.setLastName(lastName);
         host.setEmail(email);
         host.setPhoneNumber(phoneNumber);
+        host.setAcceleratorMember(isAcceleratorMember);
         return host;
 
     }

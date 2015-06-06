@@ -1,6 +1,7 @@
 package com.citi.innovaciti.welcome.domain;
 
 
+import com.citi.innovaciti.welcome.utils.PhoneNumberUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
@@ -30,6 +31,8 @@ public class Host {
 
     private String email;
 
+    private boolean acceleratorMember;
+
     @JsonIgnore
     private boolean active = true; //initialized to true
 
@@ -37,12 +40,13 @@ public class Host {
     public Host() {
     }
 
-    public Host(String firstName, String lastName, String phoneNumber, String picUrl, String email) {
+    public Host(String firstName, String lastName, String phoneNumber, String picUrl, String email, boolean isAcceleratorMember) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
         this.picUrl = picUrl;
         this.email = email;
+        setPhoneNumber(phoneNumber);
+        this.acceleratorMember = isAcceleratorMember;
     }
 
     public String getFirstName() {
@@ -71,7 +75,8 @@ public class Host {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        String fixedPhoneNumber = PhoneNumberUtils.removeIllegalCharsFromPhoneNumber(phoneNumber);
+        this.phoneNumber = fixedPhoneNumber;
     }
 
     public String getPicUrl() {
@@ -98,6 +103,13 @@ public class Host {
         this.active = active;
     }
 
+    public boolean isAcceleratorMember() {
+        return acceleratorMember;
+    }
+
+    public void setAcceleratorMember(boolean acceleratorMember) {
+        this.acceleratorMember = acceleratorMember;
+    }
 
     public void merge(Host updaterHost){
         this.setFirstName(updaterHost.getFirstName());
@@ -106,6 +118,7 @@ public class Host {
         this.setEmail(updaterHost.getEmail());
         this.setActive(updaterHost.isActive());
         this.setPicUrl(updaterHost.getPicUrl());
+        this.setAcceleratorMember(updaterHost.isAcceleratorMember());
     }
 
     @Override
@@ -115,20 +128,19 @@ public class Host {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", picUrl='" + picUrl + '\'' +
                 ", email='" + email + '\'' +
+                ", acceleratorMember=" + acceleratorMember +
                 ", active=" + active +
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
+
+    public boolean equalsInIdentificationProperties(Object o) {
         if (this == o) return true;
         if (!(o instanceof Host)) return false;
 
         Host host = (Host) o;
 
-        if (active != host.active) return false;
         if (email != null ? !email.equals(host.email) : host.email != null) return false;
         if (firstName != null ? !firstName.equals(host.firstName) : host.firstName != null) return false;
         if (lastName != null ? !lastName.equals(host.lastName) : host.lastName != null) return false;
@@ -138,13 +150,15 @@ public class Host {
     }
 
 
-
-    public boolean equalsExceptForActive(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Host)) return false;
 
         Host host = (Host) o;
 
+        if (acceleratorMember != host.acceleratorMember) return false;
+        if (active != host.active) return false;
         if (email != null ? !email.equals(host.email) : host.email != null) return false;
         if (firstName != null ? !firstName.equals(host.firstName) : host.firstName != null) return false;
         if (lastName != null ? !lastName.equals(host.lastName) : host.lastName != null) return false;
@@ -159,6 +173,7 @@ public class Host {
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (acceleratorMember ? 1 : 0);
         result = 31 * result + (active ? 1 : 0);
         return result;
     }

@@ -47,6 +47,9 @@ public class SmsService {
     @Value("${sms.host.notification.message.template}")
     private String hostNotificationMessageTemplate;
 
+    @Value("${sms.host.notification.message.template.with.floor.number}")
+    private String hostNotificationMessageTemplateWithFloorNumber;
+
     private RestTemplate restTemplate;
     private XStream xstream;
 
@@ -59,21 +62,61 @@ public class SmsService {
     }
 
 
-    public boolean sendSmsToHostRegardingWaitingGuest(Host host, Guest guest){
+    public boolean sendSmsToHostRegardingWaitingGuest(Host host, Guest guest, Integer guestWaitingFloorNumber) {
+        String message;
 
-        String message = MessageFormat.format(
-                hostNotificationMessageTemplate,
-                host.getFirstName(),
-                guest.getFullName(),guest.getFirstName(), guest.getPhoneNumber());
+        if (guestWaitingFloorNumber == null) {
+            message = MessageFormat.format(
+                    hostNotificationMessageTemplate,
+                    host.getFirstName(),
+                    guest.getFullName(),
+                    guest.getFirstName(),
+                    guest.getPhoneNumber());
+        } else {
+            message = MessageFormat.format(
+                    hostNotificationMessageTemplateWithFloorNumber,
+                    host.getFirstName(),
+                    guest.getFullName(),
+                    getNumberAsOrdinalRepresentation(guestWaitingFloorNumber),
+                    guest.getFirstName(),
+                    guest.getPhoneNumber());
+        }
 
-        log.info("Sending SMS to host "+host.toString()+" with the following message:\n"+message);
+        log.info("Sending SMS to host " + host.toString() + " with the following message:\n" + message);
 
         return sendSms(host.getPhoneNumber(), message);
     }
 
 
+    private String getNumberAsOrdinalRepresentation(int number) {
+
+        int lastTwoDigits = number % 100;
+        int lastDigit = number % 10;
+
+        if (11 <= lastTwoDigits && lastTwoDigits <= 13) {
+
+            return number + "th";
+
+        } else {
+            switch (lastDigit) {
+                case 1:
+                    return number + "st";
+
+                case 2:
+                    return number + "nd";
+
+                case 3:
+                    return number + "rd";
+
+                default:
+                    return number + "th";
+            }
+        }
+
+    }
+
+
     /**
-     *
      * @param recipientPhoneNumber
      * @param message
      * @return true if the sms was sent successfully, false otherwise
@@ -96,10 +139,10 @@ public class SmsService {
 
         String smsServiceResponseAsXml = response.getBody();
 
-        if(smsServiceResponseAsXml == null){
+        if (smsServiceResponseAsXml == null) {
 
-            log.error("Failed to send an SMS to "+ recipientPhoneNumber+
-                    ". Http Status is "+httpStatus+". SMS service response is null.");
+            log.error("Failed to send an SMS to " + recipientPhoneNumber +
+                    ". Http Status is " + httpStatus + ". SMS service response is null.");
             return false;
         }
 
@@ -109,8 +152,8 @@ public class SmsService {
 
         if (smsServiceResponseStatus != SMS_SERVICE_OK_STATUS) {
 
-            log.error("Failed to send an SMS to "+ recipientPhoneNumber+
-                    ". Http Status is "+httpStatus+". SMS service response is:\n" + smsServiceResponseAsXml);
+            log.error("Failed to send an SMS to " + recipientPhoneNumber +
+                    ". Http Status is " + httpStatus + ". SMS service response is:\n" + smsServiceResponseAsXml);
             return false;
 
         } else {

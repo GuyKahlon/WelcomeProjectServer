@@ -15,6 +15,7 @@
 <li>Second column: last name</li>
 <li>Third column: email</li>
 <li>Forth column: phone-number</li>
+<li>Fifth column: isAcceleratorMember (optional column, to indicate that the host is a member of the accelerator set <b>true</b>, otherwise, leave empty)</li>
 </ul></p><br/>
 <p>The result of this action would be, that all hosts the exist in the DB, but not in the file, will be Deactivated.<br/>
 Hosts that exist both in the DB and in the file will be updated according to file.<br/>
